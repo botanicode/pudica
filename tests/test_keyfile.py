@@ -113,3 +113,27 @@ def test_init_bad_label():
             keyfile = Keyfile(_testpath, "notpresent")
     finally:
         _unlink_testpath()
+
+
+def test_add_good_label():
+    _unlink_testpath()
+    try:
+        Keyfile.generate(_testpath)
+        keyfile = Keyfile(_testpath, "default")
+        keyfile.add_key("test")
+        assert len(keyfile.keys) == 1
+        test_keyfile = Keyfile(_testpath, label="test")
+        assert keyfile.keys[0]["key"] == test_keyfile.keys[0]["key"]
+    finally:
+        _unlink_testpath()
+
+
+def test_add_bad_label():
+    _unlink_testpath()
+    try:
+        Keyfile.generate(_testpath)
+        keyfile = Keyfile(_testpath, "default")
+        with pytest.raises(KeyfileLabelExistsError):
+            keyfile.add_key("default")
+    finally:
+        _unlink_testpath()
