@@ -138,6 +138,7 @@ def test_add_bad_label():
     finally:
         _unlink_testpath()
 
+
 def test_delete_good_label():
     _unlink_testpath()
     try:
@@ -165,6 +166,7 @@ def test_delete_bad_label():
             keyfile.delete_key("default")
     finally:
         _unlink_testpath()
+
 
 def test_update_good_label():
     _unlink_testpath()
