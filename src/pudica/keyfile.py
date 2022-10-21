@@ -89,6 +89,19 @@ class Keyfile:
             config.write(f)
         self._parsekeys(label)
 
+    def delete_key(self, label: str):
+        config = self._readkeyfile()
+        if label not in config.sections():
+            raise KeyfileLabelNotExistsError
+        config.remove_section(label)
+        with open(self.path, "w", encoding="utf-8") as f:
+            config.write(f)
+        self._parsekeys()
+
+    def update_key(self, label: str):
+        self.delete_key(label)
+        self.add_key(label)
+
     @staticmethod
     def generate(
         path: str,

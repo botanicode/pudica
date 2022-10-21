@@ -137,3 +137,55 @@ def test_add_bad_label():
             keyfile.add_key("default")
     finally:
         _unlink_testpath()
+
+def test_delete_good_label():
+    _unlink_testpath()
+    try:
+        Keyfile.generate(_testpath)
+        keyfile = Keyfile(_testpath, "default")
+        keyfile.add_key("test1")
+        keyfile.add_key("test2")
+        keyfile.add_key("test3")
+        keyfile.delete_key("default")
+        assert len(keyfile.keys) == 3
+    finally:
+        _unlink_testpath()
+
+
+def test_delete_bad_label():
+    _unlink_testpath()
+    try:
+        Keyfile.generate(_testpath)
+        keyfile = Keyfile(_testpath, "default")
+        keyfile.add_key("test1")
+        keyfile.add_key("test2")
+        keyfile.add_key("test3")
+        keyfile.delete_key("default")
+        with pytest.raises(KeyfileLabelNotExistsError):
+            keyfile.delete_key("default")
+    finally:
+        _unlink_testpath()
+
+def test_update_good_label():
+    _unlink_testpath()
+    try:
+        Keyfile.generate(_testpath)
+        keyfile = Keyfile(_testpath, "default")
+        keyfile.add_key("test")
+        orig_key = keyfile.keys[0]["key"]
+        keyfile.update_key("test")
+        assert len(keyfile.keys) == 1
+        assert orig_key != keyfile.keys[0]["key"]
+    finally:
+        _unlink_testpath()
+
+
+def test_update_bad_label():
+    _unlink_testpath()
+    try:
+        Keyfile.generate(_testpath)
+        keyfile = Keyfile(_testpath, "default")
+        with pytest.raises(KeyfileLabelNotExistsError):
+            keyfile.update_key("test")
+    finally:
+        _unlink_testpath()
