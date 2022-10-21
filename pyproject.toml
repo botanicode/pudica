@@ -16,4 +16,5 @@ requires = [
 [project.optional-dependencies]
 test = [
     "pytest >=7.1.0",
+    "pytest-cov >= 4.0.0",
 ]

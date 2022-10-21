@@ -7,11 +7,13 @@ from pudica.keyfile import *
 
 _testpath = f".{os.path.sep}keyfile"
 
+
 def _unlink_testpath():
     try:
         os.unlink(_testpath)
     except FileNotFoundError:
-        pass    
+        pass
+
 
 # Test that a Keyfile can be generated
 def test_generate():
@@ -21,6 +23,7 @@ def test_generate():
     finally:
         assert os.path.exists(_testpath)
         _unlink_testpath()
+
 
 # Test that a Keyfile has the proper fields with correct values
 def test_generate_validity():
@@ -33,8 +36,11 @@ def test_generate_validity():
         assert config.sections() == ["default"]
         assert len(config["default"]["key"]) == 44
         assert config["default"].getboolean("multikey") == True
-        assert config["default"]["updated"] == datetime.datetime.today().strftime('%Y-%m-%d')
+        assert config["default"]["updated"] == datetime.datetime.today().strftime(
+            "%Y-%m-%d"
+        )
         _unlink_testpath()
+
 
 # Test that a duplicate Keyfile can not be generated
 def test_generate_duplicate():
@@ -45,6 +51,7 @@ def test_generate_duplicate():
             Keyfile.generate(_testpath)
     finally:
         _unlink_testpath()
+
 
 def test_init_ok():
     _unlink_testpath()
@@ -68,6 +75,7 @@ def test_init_ok():
     finally:
         _unlink_testpath()
 
+
 def test_init_bad_path():
     _unlink_testpath()
     try:
@@ -76,11 +84,32 @@ def test_init_bad_path():
     finally:
         _unlink_testpath()
 
+
 def test_init_bad_env():
     _unlink_testpath()
     try:
         with pytest.raises(KeyfileNotFoundError):
             os.environ["PUDICA_KEYFILE"] = _testpath
             Keyfile()
+    finally:
+        _unlink_testpath()
+
+
+def test_init_good_label():
+    _unlink_testpath()
+    try:
+        Keyfile.generate(_testpath)
+        keyfile = Keyfile(_testpath, "default")
+        assert len(keyfile.keys) == 1
+    finally:
+        _unlink_testpath()
+
+
+def test_init_bad_label():
+    _unlink_testpath()
+    try:
+        with pytest.raises(KeyfileLabelNotExistsError):
+            Keyfile.generate(_testpath)
+            keyfile = Keyfile(_testpath, "notpresent")
     finally:
         _unlink_testpath()
