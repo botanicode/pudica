@@ -3,22 +3,7 @@ import typing
 from cryptography.fernet import Fernet
 import configparser
 import datetime
-
-
-class KeyfileNotFoundError(FileNotFoundError):
-    pass
-
-
-class KeyfileExistsError(FileNotFoundError):
-    pass
-
-
-class KeyfileLabelNotExistsError(ValueError):
-    pass
-
-
-class KeyfileLabelExistsError(ValueError):
-    pass
+from pudica.errors import *
 
 
 class Keyfile:
