@@ -13,6 +13,16 @@ def _unlink_testpath():
         pass
 
 
+def test_init_ok():
+    _unlink_testpath()
+    try:
+        with open(_testpath, "w", encoding="utf-8") as f:
+            f.write("test[default]:badvalue")
+            _ = Vault()
+    finally:
+        _unlink_testpath()
+
+
 def test_vault_bad_env():
     _unlink_testpath()
     try:

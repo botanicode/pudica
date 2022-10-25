@@ -1,10 +1,19 @@
 import os
 from pudica.errors import *
+from dataclasses import dataclass
+import typing
+
+
+@dataclass
+class VaultDefinition:
+    key: str
+    label: typing.Optional[str]
+    value: str
 
 
 class Vault:
 
-    __slots__ = "paths"
+    __slots__ = ("paths", "definitions")
 
     def __init__(self):
         if "PUDICA_VAULTS" not in os.environ:
@@ -16,3 +25,18 @@ class Vault:
                 errorpaths.append(path)
         if len(errorpaths) > 0:
             raise VaultFileNotExistsError(", ".join(errorpaths))
+        self.definitions = list()
+        seen_definitions = set()
+        for path in self.paths:
+            with open(path, "r", encoding="utf-8") as f:
+                for line in f.readlines():
+                    components = line.split(":")
+                    definition = VaultDefinition(*components)
+                    fingerprint = ":".join(components[:2])
+                    if fingerprint in seen_definitions:
+                        raise VaultDuplicateDefinitionError(fingerprint)
+                    seen_definitions.add(fingerprint)
+                    if len(definition.label) == 0:
+                        definition.label = None
+                    self.definitions.append(definition)
+        print(self.definitions)

@@ -21,7 +21,7 @@ Pudica allows you to store encrypted values in **vaults**. This helps with reusa
 
 A **vault** definition is composed of a **key**, a **label** (optional), and a **value**, and may look something like this:
 ```
-key[label]=gAAAAABjWBNz4TJ_5FTuOvP_IcUpJbjff0v2vXplWQ3gtl0TFzEmo_sY25_28_Xw79tmspUMAuvRLOG-wAMjbnyM_8Wav3gGxqJPk8yiUw615lSCB5c1pjY=
+key:label:gAAAAABjWBNz4TJ_5FTuOvP_IcUpJbjff0v2vXplWQ3gtl0TFzEmo_sY25_28_Xw79tmspUMAuvRLOG-wAMjbnyM_8Wav3gGxqJPk8yiUw615lSCB5c1pjY=
 ```
 The **key** is how you look up definitions, and the **value** is the encrypted value for the associated **key**. The **label** is optional, but will tell pudica which **keyfile** to use. Having a **label** required for key rotation, and is handy if the **keyfile** definition for the given **label** does not allow for **multikey**.
 
