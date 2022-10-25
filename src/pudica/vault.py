@@ -39,4 +39,3 @@ class Vault:
                     if len(definition.label) == 0:
                         definition.label = None
                     self.definitions.append(definition)
-        print(self.definitions)
