@@ -20,7 +20,3 @@ class VaultEnvVarNotSetError(ValueError):
 
 class VaultFileNotExistsError(FileNotFoundError):
     pass
-
-
-class VaultDuplicateDefinitionError(ValueError):
-    pass

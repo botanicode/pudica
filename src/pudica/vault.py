@@ -26,16 +26,11 @@ class Vault:
         if len(errorpaths) > 0:
             raise VaultFileNotExistsError(", ".join(errorpaths))
         self.definitions = list()
-        seen_definitions = set()
         for path in self.paths:
             with open(path, "r", encoding="utf-8") as f:
                 for line in f.readlines():
                     components = line.split(":")
                     definition = VaultDefinition(*components)
-                    fingerprint = ":".join(components[:2])
-                    if fingerprint in seen_definitions:
-                        raise VaultDuplicateDefinitionError(fingerprint)
-                    seen_definitions.add(fingerprint)
                     if len(definition.label) == 0:
                         definition.label = None
                     self.definitions.append(definition)
