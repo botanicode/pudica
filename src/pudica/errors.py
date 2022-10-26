@@ -20,3 +20,7 @@ class VaultEnvVarNotSetError(ValueError):
 
 class VaultFileNotExistsError(FileNotFoundError):
     pass
+
+
+class VaultKeyLabelNotExistsError(ValueError):
+    pass

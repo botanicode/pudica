@@ -23,7 +23,9 @@ A **vault** definition is composed of a **key**, a **label** (optional), and a *
 ```
 key:label:gAAAAABjWBNz4TJ_5FTuOvP_IcUpJbjff0v2vXplWQ3gtl0TFzEmo_sY25_28_Xw79tmspUMAuvRLOG-wAMjbnyM_8Wav3gGxqJPk8yiUw615lSCB5c1pjY=
 ```
-The **key** is how you look up definitions, and the **value** is the encrypted value for the associated **key**. The **label** is optional, but will tell pudica which **keyfile** to use. Having a **label** required for key rotation, and is handy if the **keyfile** definition for the given **label** does not allow for **multikey**.
+The **key** is how you look up definitions, and the **value** is the encrypted value for the associated **key**. **Key** values can be created in whatever format you like, but we prefer [reverse domain name notation](https://en.wikipedia.org/wiki/Reverse_domain_name_notation), particularly if you want to integrate it into your service or code.
+
+The **label** is optional, but will tell pudica which **keyfile** to use. Having a **label** required for key rotation, and is handy if the **keyfile** definition for the given **label** does not allow for **multikey**.
 
 ## Where did the name come from?
 The name comes from *[Mimosa pudica](https://en.wikipedia.org/wiki/Mimosa_pudica)*, a plant that will fold in on itself when touched. Given that *pudica* roughly translates to "bashful" or "shy", it seemed a natural name for an encryption tool.

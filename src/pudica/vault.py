@@ -39,3 +39,23 @@ class Vault:
                     if len(definition.label) == 0:
                         definition.label = None
                     self.definitions.append(definition)
+
+    def get_vault_item(
+        self, key: str, label: typing.Optional[str] = None, get_default: bool = True
+    ):
+        key_definitions = [x for x in self.definitions if x.key == key]
+        if len(key_definitions) == 0:
+            raise VaultKeyLabelNotExistsError
+        if label == None:
+            unlabeled_definition = [x for x in key_definitions if x.label is None]
+            if len(unlabeled_definition) > 0:
+                return unlabeled_definition[0]
+            default_definition = [x for x in key_definitions if x.label == "default"]
+            if len(default_definition) > 0 and get_default is True:
+                return default_definition[0]
+            return key_definitions[0]
+        else:
+            mathcing_definition = [x for x in key_definitions if x.label == label]
+            if len(mathcing_definition) > 0:
+                return mathcing_definition[0]
+        raise VaultKeyLabelNotExistsError
