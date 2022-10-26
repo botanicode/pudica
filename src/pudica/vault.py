@@ -40,7 +40,7 @@ class Vault:
                         definition.label = None
                     self.definitions.append(definition)
 
-    def get_vault_item(
+    def get_definition(
         self, key: str, label: typing.Optional[str] = None, get_default: bool = True
     ):
         key_definitions = [x for x in self.definitions if x.key == key]
