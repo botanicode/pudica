@@ -14,6 +14,10 @@ class KeyfileLabelExistsError(ValueError):
     pass
 
 
+class KeyfileWriteFailureError(ValueError):
+    pass
+
+
 class VaultEnvVarNotSetError(ValueError):
     pass
 
@@ -23,4 +27,20 @@ class VaultFileNotExistsError(FileNotFoundError):
 
 
 class VaultKeyLabelNotExistsError(ValueError):
+    pass
+
+
+class KeyfileKeynameNotExistsError(ValueError):
+    pass
+
+
+class VaultItemNotExistsError(ValueError):
+    pass
+
+
+class VaultItemExistsError(ValueError):
+    pass
+
+
+class VaultDefinitionNotExistsError(ValueError):
     pass
