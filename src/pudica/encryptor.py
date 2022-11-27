@@ -1,7 +1,7 @@
 from cryptography.fernet import Fernet, MultiFernet
 import os
 from typing import Union, List
-from pudica.keyfile import Key
+from pudica.keychain import Key
 
 
 class Encryptor:
@@ -9,7 +9,7 @@ class Encryptor:
     def _make_fernets(keys):
         fernets = list()
         for key in keys:
-            fernets.append(Fernet(key.fernet.encode("utf-8")))
+            fernets.append(key.fernet)
         return MultiFernet(fernets)
 
     @staticmethod

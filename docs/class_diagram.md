@@ -1,68 +1,71 @@
 ```mermaid
 classDiagram
-      class Keyfile{
+      class Keychain{
         path
         keys
-        _to_dict()
+        _todict()
         _save()
+        get_key()
+        get_multikeys()
+        add_key()
         new_key()
         default_key()
-        get_key()
-        with_keyname()
-        get_multikeys()
-        generate()
+        key()$
+        with_keyname()$
+        multikeys()$
+        generate()$
       }
       class Vault{
         paths
         definitions
         get()
         add()
-        with_keyname()
-        get_definition()
-        generate()
+        with_keyname()$
+        get_definition()$
+        generate()$
       }
       class Encryptor{
-        _make_fernets()
-        encrypt_multi()
-        encrypt_bytes()
-        encrypt_str()
-        encrypt()
-        encrypt_file()
-        decrypt_multi()
-        decrypt_bytes()
-        decrypt_str()
+        _make_fernets()$
+        encrypt_multi()$
+        encrypt_bytes()$
+        encrypt_str()$
+        encrypt()$
+        encrypt_file()$
+        decrypt_multi()$
+        decrypt_bytes()$
+        decrypt_str()$
       }
       class Pudica{
-        __keyfile
+        __keychain
         __vault
-        load_keyfile()
+        load_keychain()
         load_vault()
         encrypt()
         decrypt()
-        generate_keyfile()
-        generate_vault()
+        generate_keychain()$
+        generate_vault()$
       }
       class VaultDefinition{
         id
         keyname
         ciphertext
         vaultpath
-        fromdict()
+        fromdict()$
         todict()
-        new()
+        new()$
       }
       class Key{
         keyname
         fernet
         multikey
         updated
-        fromdict()
+        fromdict()$
         todict()
-        new()
+        new()$
       }
-      Keyfile "1" o-- "*" Key
+      Keychain "1" o-- "*" Key
       Vault "1" o-- "*" VaultDefinition
-      Pudica -- Keyfile
+      Pudica -- Keychain
       Pudica -- Encryptor
       Pudica -- Vault
 ```

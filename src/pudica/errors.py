@@ -1,20 +1,24 @@
-class KeyfileNotFoundError(FileNotFoundError):
+class KeyMalformedError(ValueError):
     pass
 
 
-class KeyfileExistsError(FileNotFoundError):
+class KeychainNotFoundError(FileNotFoundError):
     pass
 
 
-class KeyfileLabelNotExistsError(ValueError):
+class KeychainExistsError(FileNotFoundError):
     pass
 
 
-class KeyfileLabelExistsError(ValueError):
+class KeychainLabelNotExistsError(ValueError):
     pass
 
 
-class KeyfileWriteFailureError(ValueError):
+class KeychainLabelExistsError(ValueError):
+    pass
+
+
+class KeychainWriteFailureError(ValueError):
     pass
 
 
@@ -30,7 +34,7 @@ class VaultKeyLabelNotExistsError(ValueError):
     pass
 
 
-class KeyfileKeynameNotExistsError(ValueError):
+class KeychainKeynameNotExistsError(ValueError):
     pass
 
 

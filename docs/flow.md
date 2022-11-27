@@ -1,11 +1,11 @@
 ```mermaid
 graph TD
-    A[Keyfile for Encrypt]
-    B{Keyfile Exists?}
-    C([KeyfileExistsError])
+    A[Keychain for Encrypt]
+    B{Keychain Exists?}
+    C([KeychainExistsError])
     D{Keyname provided?}
     E{Keyname exists?}
-    F([KeyfileKeynameNotExistsError])
+    F([KeychainKeynameNotExistsError])
     G(Return requested Key)
     H{default key present?}
     I(Return first key)
@@ -23,12 +23,12 @@ graph TD
 
 ```mermaid
 graph TD
-    A[Keyfile for Decrypt]
-    B{Keyfile Exists?}
-    C([KeyfileExistsError])
+    A[Keychain for Decrypt]
+    B{Keychain Exists?}
+    C([KeychainExistsError])
     D{Keyname provided?}
     E{Keyname exists?}
-    F([KeyfileKeynameNotExistsError])
+    F([KeychainKeynameNotExistsError])
     G(Return requested Key)
     H(Return multikeys)
 
