@@ -26,13 +26,17 @@ class Pudica:
         del self.__keyfile
         del self.__vault
 
-    def load_keyfile(self, keyfile_path: Optional[str] = None, keyname: Optional[str] = None):
+    def load_keyfile(
+        self, keyfile_path: Optional[str] = None, keyname: Optional[str] = None
+    ):
         if keyname is not None:
             self.__keyfile = Keyfile.with_keyname(keyname, keyfile_path)
         else:
             self.__keyfile = Keyfile(keyfile_path)
 
-    def load_vault(self, vault_paths: Optional[str] = None, keyname: Optional[str] = None):
+    def load_vault(
+        self, vault_paths: Optional[str] = None, keyname: Optional[str] = None
+    ):
         if keyname is not None:
             self.__vault - Vault.with_keyname(keyname, vault_paths)
         else:
@@ -83,8 +87,7 @@ class Pudica:
     @staticmethod
     def generate_keyfile(path: str, overwrite: bool = False):
         Keyfile.generate(path, overwrite)
-    
+
     @staticmethod
     def generate_vault(path: str, overwrite: bool = False):
         Vault.generate(path, overwrite)
-        
