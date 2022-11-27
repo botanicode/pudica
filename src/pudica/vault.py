@@ -155,13 +155,3 @@ class Vault:
         newvault = {"definitions": list()}
         with open(path, "w", encoding="utf-8") as f:
             f.write(json.dumps(newvault, indent="\t"))
-
-
-if __name__ == "__main__":
-    logging.basicConfig(filename="example.log", encoding="utf-8", level=logging.DEBUG)
-    vault = Vault()
-    definition = vault.get("edu.csun.www.admin.password", "csun")
-    vault.add("testing3", "edu.csun.www.admin.password")
-    vault = Vault.with_keyname("csun")
-    definition = Vault.get_definition("edu.csun.www.admin.password", keyname="default")
-    print(definition)

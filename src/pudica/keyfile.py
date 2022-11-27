@@ -186,13 +186,3 @@ class Keyfile:
         newvault = {"keys": list()}
         with open(path, "w", encoding="utf-8") as f:
             f.write(json.dumps(newvault, indent="\t"))
-
-
-if __name__ == "__main__":
-    logging.basicConfig(filename="example.log", encoding="utf-8", level=logging.DEBUG)
-    keys = Keyfile.get_multikeys()
-    print(keys)
-    key = Keyfile.get_key()
-    print(key)
-    kf = Keyfile()
-    kf.new_key("testing", multikey=False, replace_existing=True)

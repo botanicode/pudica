@@ -87,12 +87,4 @@ class Pudica:
     @staticmethod
     def generate_vault(path: str, overwrite: bool = False):
         Vault.generate(path, overwrite)
-
-
-if __name__ == "__main__":
-    with Pudica() as pu:
-        definition = pu.encrypt("a", keyname="csun", save_id="com.example.testing")
-        print(f"encrypted: {definition.ciphertext}")
-        print(
-            f"decrypted: {pu.decrypt(definition.ciphertext, keyname=definition.keyname)}"
-        )
+        
