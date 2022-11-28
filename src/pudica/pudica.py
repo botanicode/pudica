@@ -58,7 +58,13 @@ class Pudica:
         id: uuid.UUID = uuid.uuid4()
         return VaultDefinition(id, key.keyname, ciphertext)
 
-    def encrypt_file(self, path: str, *, keyname: Optional[str] = None, save_path: Optional[str] = None) -> bytes:
+    def encrypt_file(
+        self,
+        path: str,
+        *,
+        keyname: Optional[str] = None,
+        save_path: Optional[str] = None,
+    ) -> bytes:
         key: Key = self._keychain._get_key(keyname)
         encrypted: bytes = Encryptor.encrypt_file(key, path)
         if save_path is not None:
@@ -98,7 +104,13 @@ class Pudica:
     ) -> str:
         return self.decrypt(ciphertext, keyname=keyname).decode(cleartext_encoding)
 
-    def decrypt_file(self, path: str, *, keyname: Optional[str] = None, save_path: Optional[str] = None) -> bytes:
+    def decrypt_file(
+        self,
+        path: str,
+        *,
+        keyname: Optional[str] = None,
+        save_path: Optional[str] = None,
+    ) -> bytes:
         encrypted: bytes = bytes()
         if keyname is not None:
             encrypted = Encryptor.decrypt_file(self._keychain.key(keyname), path)
