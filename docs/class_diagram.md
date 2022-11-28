@@ -48,6 +48,7 @@ classDiagram
         decrypt_multi()$
         decrypt_bytes()$
         decrypt_str()$
+        decrypt_file$
       }
       class Pudica{
         __keychain

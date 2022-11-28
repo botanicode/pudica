@@ -52,3 +52,10 @@ class Encryptor:
     @staticmethod
     def decrypt_str(key: Key, s: str, encoding: str = "utf-8") -> bytes:
         return Encryptor.decrypt_bytes(key, s.encode(encoding))
+
+    @staticmethod
+    def decrypt_file(key: Key, path: str) -> bytes:
+        if not os.path.exists(path):
+            raise FileNotFoundError
+        with open(path, "r", encoding="utf-8") as f:
+            return Encryptor.decrypt_str(key, f.read())
