@@ -15,13 +15,27 @@ classDiagram
         multikeys()$
         generate()$
       }
-      class Vault{
-        paths
-        definitions
+      class VaultManager{
+        vaults
         get()
-        add()
+        upsert_definition()
+        synthetic_vault()
         with_keyname()$
-        get_definition()$
+        definition()$
+      }
+      class Vault{
+        path
+        definitions
+        synthetic
+        get_ids()
+        get_keynames()
+        filter_ids()
+        filter_keynames()
+        add_definitions()
+        synthetic()
+        upsert()
+        _todict()
+        _save()
         generate()$
       }
       class Encryptor{
@@ -49,10 +63,9 @@ classDiagram
         id
         keyname
         ciphertext
-        vaultpath
+        vault
         fromdict()$
         todict()
-        new()$
       }
       class Key{
         keyname
@@ -64,8 +77,9 @@ classDiagram
         new()$
       }
       Keychain "1" o-- "*" Key
+      VaultManager "1" o-- "*" Vault
       Vault "1" o-- "*" VaultDefinition
       Pudica -- Keychain
       Pudica -- Encryptor
-      Pudica -- Vault
+      Pudica -- VaultManager
 ```

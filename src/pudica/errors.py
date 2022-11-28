@@ -6,7 +6,7 @@ class KeychainNotFoundError(FileNotFoundError):
     pass
 
 
-class KeychainExistsError(FileNotFoundError):
+class KeychainExistsError(IOError):
     pass
 
 
@@ -18,7 +18,7 @@ class KeychainLabelExistsError(ValueError):
     pass
 
 
-class KeychainWriteFailureError(ValueError):
+class KeychainWriteFailureError(IOError):
     pass
 
 
@@ -47,4 +47,23 @@ class VaultItemExistsError(ValueError):
 
 
 class VaultDefinitionNotExistsError(ValueError):
+    pass
+
+
+class VaultDefinitionMalformedError(ValueError):
+    pass
+
+
+class VaultMutateNotSyntheticError(ValueError):
+    pass
+
+
+class VaultUpsertSyntheticError(ValueError):
+    pass
+
+
+class VaultWriteFailureError(IOError):
+    pass
+
+class VaultExistsError(IOError):
     pass

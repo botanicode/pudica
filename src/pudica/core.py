@@ -2,7 +2,7 @@ import typing
 from typing import Optional
 from pudica.encryptor import Encryptor
 from pudica.keychain import Keychain
-from pudica.vault import VaultDefinition, Vault
+from pudica.vault import VaultDefinition, VaultManager
 import uuid
 import os
 
@@ -39,9 +39,9 @@ class Pudica:
         self, vault_paths: Optional[str] = None, keyname: Optional[str] = None
     ):
         if keyname is not None:
-            self.__vault - Vault.with_keyname(keyname, vault_paths)
+            self.__vault - VaultManager.with_keyname(keyname, vault_paths)
         else:
-            self.__vault = Vault(vault_paths)
+            self.__vault = VaultManager(vault_paths)
 
     def encrypt(
         self,
@@ -94,4 +94,4 @@ class Pudica:
 
     @staticmethod
     def generate_vault(path: str, overwrite: bool = False):
-        Vault.generate(path, overwrite)
+        VaultManager.generate(path, overwrite)

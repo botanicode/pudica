@@ -201,8 +201,8 @@ class Keychain:
         if os.path.exists(path) and overwrite is False:
             logging.error(f"Keychain already exists at `{path}`")
             raise KeychainExistsError
-        newvault = {"keys": list()}
+        newkeychain = {"keys": list()}
         with open(path, "w", encoding="utf-8") as f:
-            f.write(json.dumps(newvault, indent="\t"))
+            f.write(json.dumps(newkeychain, indent="\t"))
         logging.debug(f"New keychain generated at `{path}`")
         return Keychain(path)
