@@ -38,7 +38,7 @@ class Encryptor:
     def encrypt_file(key: Key, path: str, encoding: str = "utf-8") -> bytes:
         if not os.path.exists(path):
             raise FileNotFoundError
-        with open(path, "r", encoding=encoding) as f:
+        with open(path, "rb") as f:
             return Encryptor.encrypt(key, f.read())
 
     @staticmethod
@@ -61,12 +61,12 @@ class Encryptor:
     def decrypt_file(key: Key, path: str) -> bytes:
         if not os.path.exists(path):
             raise FileNotFoundError
-        with open(path, "r", encoding="utf-8") as f:
-            return Encryptor.decrypt_str(key, f.read())
+        with open(path, "rb") as f:
+            return Encryptor.decrypt_bytes(key, f.read())
 
     @staticmethod
     def decrypt_file_multi(keys: List[Key], path: str) -> bytes:
         if not os.path.exists(path):
             raise FileNotFoundError
-        with open(path, "r", encoding="utf-8") as f:
-            return Encryptor.decrypt_str_multi(keys, f.read())
+        with open(path, "rb") as f:
+            return Encryptor.decrypt_multi(keys, f.read())
