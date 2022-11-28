@@ -10,7 +10,8 @@ license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: MIT License"]
 dynamic = ["version", "description"]
 requires = [
-    "cryptography >= 36.0.2"
+    "cryptography >= 36.0.2",
+    "click >= 8.1.0",
 ]
 
 [project.optional-dependencies]
@@ -18,3 +19,6 @@ test = [
     "pytest >=7.1.0",
     "pytest-cov >= 4.0.0",
 ]
+
+[project.scripts]
+pudica="pudica.cli:cli"

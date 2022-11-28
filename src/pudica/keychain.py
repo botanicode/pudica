@@ -13,6 +13,7 @@ from pudica.errors import (
     KeychainExistsError,
 )
 import shutil
+import base64
 
 
 @dataclass
@@ -46,7 +47,9 @@ class Key:
     def todict(self) -> Dict[str, Any]:
         return {
             "keyname": self.keyname,
-            "fernet": self.fernet,
+            "fernet": base64.b64encode(
+                self.fernet._signing_key + self.fernet._encryption_key
+            ).decode("utf-8"),
             "multikey": self.multikey,
             "updated": self.updated,
         }
@@ -106,8 +109,8 @@ class Keychain:
             with open(self.path, "w", encoding="utf-8") as f:
                 f.write(json.dumps(self._todict(), indent="\t"))
             logging.debug(f"Updated keychain written")
-        except:
-            logging.error(f"Writing updated keychain failed")
+        except Exception as e:
+            logging.error(f"Writing updated keychain failed: {e}")
             logging.error(f"Restoring original keychain")
             shutil.copyfile(backup_path, self.path)
             errored = True
@@ -205,4 +208,6 @@ class Keychain:
         with open(path, "w", encoding="utf-8") as f:
             f.write(json.dumps(newkeychain, indent="\t"))
         logging.debug(f"New keychain generated at `{path}`")
-        return Keychain(path)
+        keychain: Keychain = Keychain(path)
+        keychain.new_key("default")
+        return keychain

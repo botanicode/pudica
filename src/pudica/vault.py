@@ -118,8 +118,10 @@ class Vault:
         for pos, defn in enumerate(self.definitions):
             if defn.id == definition.id and defn.keyname == definition.keyname:
                 self.definitions[pos] = definition
-                return True
+                definition.vault = self
+                return self._save()
         definition.vault = self
+        self.definitions.append(definition)
         return self._save()
 
     def _todict(self) -> Dict[str, Any]:
@@ -136,8 +138,8 @@ class Vault:
             with open(self.path, "w", encoding="utf-8") as f:
                 f.write(json.dumps(self._todict(), indent="\t"))
             logging.debug(f"Updated vault written")
-        except:
-            logging.error(f"Writing updated vault failed")
+        except Exception as e:
+            logging.error(f"Writing updated vault failed: {e}")
             logging.error(f"Restoring original vault")
             shutil.copyfile(backup_path, self.path)
             errored = True

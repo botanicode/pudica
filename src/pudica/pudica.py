@@ -50,13 +50,14 @@ class Pudica:
         *,
         keyname: Optional[str] = None,
         cleartext_encoding: str = "utf-8",
+        id: Optional[str] = None,
     ) -> VaultDefinition:
         key: Key = self._keychain._get_key(keyname)
         ciphertext: str = Encryptor.encrypt(key, cleartext, cleartext_encoding).decode(
             "utf-8"
         )
-        id: uuid.UUID = uuid.uuid4()
-        return VaultDefinition(id, key.keyname, ciphertext)
+        working_id: str = str(uuid.uuid4()) if id is None else id
+        return VaultDefinition(working_id, key.keyname, ciphertext)
 
     def encrypt_file(
         self,
