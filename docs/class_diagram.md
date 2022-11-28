@@ -48,7 +48,9 @@ classDiagram
         decrypt_multi()$
         decrypt_bytes()$
         decrypt_str()$
+        decrypt_str_multi()$
         decrypt_file$
+        decrypt_file_multi$
       }
       class Pudica{
         __keychain
@@ -56,8 +58,10 @@ classDiagram
         load_keychain()
         load_vault()
         encrypt()
+        encrypt_file()
         decrypt()
         decrypt_str()
+        decrypt_file()
         generate_keychain()$
         generate_vault()$
       }

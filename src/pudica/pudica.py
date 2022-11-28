@@ -50,13 +50,17 @@ class Pudica:
         *,
         keyname: Optional[str] = None,
         cleartext_encoding: str = "utf-8",
-    ):
+    ) -> VaultDefinition:
         key: Key = self._keychain._get_key(keyname)
         ciphertext: str = Encryptor.encrypt(key, cleartext, cleartext_encoding).decode(
             "utf-8"
         )
         id: uuid.UUID = uuid.uuid4()
         return VaultDefinition(id, key.keyname, ciphertext)
+
+    def encrypt_file(self, path: str, *, keyname: Optional[str] = None) -> bytes:
+        key: Key = self._keychain._get_key(keyname)
+        return Encryptor.encrypt_file(key, path)
 
     def decrypt(
         self,
@@ -89,6 +93,11 @@ class Pudica:
         cleartext_encoding: str = "utf-8",
     ) -> str:
         return self.decrypt(ciphertext, keyname=keyname).decode(cleartext_encoding)
+
+    def decrypt_file(self, path: str, *, keyname: Optional[str] = None) -> bytes:
+        if keyname is not None:
+            return Encryptor.decrypt_file(self._keychain.key(keyname), path)
+        return Encryptor.decrypt_file_multi(self._keychain.multikeys(), path)
 
     @staticmethod
     def generate_keychain(

@@ -54,8 +54,19 @@ class Encryptor:
         return Encryptor.decrypt_bytes(key, s.encode(encoding))
 
     @staticmethod
+    def decrypt_str_multi(keys: List[Key], s: str, encoding: str = "utf-8") -> bytes:
+        return Encryptor.decrypt_multi(keys, s.encode(encoding))
+
+    @staticmethod
     def decrypt_file(key: Key, path: str) -> bytes:
         if not os.path.exists(path):
             raise FileNotFoundError
         with open(path, "r", encoding="utf-8") as f:
             return Encryptor.decrypt_str(key, f.read())
+
+    @staticmethod
+    def decrypt_file_multi(keys: List[Key], path: str) -> bytes:
+        if not os.path.exists(path):
+            raise FileNotFoundError
+        with open(path, "r", encoding="utf-8") as f:
+            return Encryptor.decrypt_str_multi(keys, f.read())
