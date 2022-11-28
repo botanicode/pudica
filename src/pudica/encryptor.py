@@ -6,8 +6,8 @@ from pudica.keychain import Key
 
 class Encryptor:
     @staticmethod
-    def _make_fernets(keys):
-        fernets = list()
+    def _make_fernets(keys: List[Key]) -> MultiFernet:
+        fernets: List[Fernet] = list()
         for key in keys:
             fernets.append(key.fernet)
         return MultiFernet(fernets)
@@ -32,7 +32,7 @@ class Encryptor:
             return Encryptor.encrypt_str(key, cleartext, encoding)
         elif isinstance(cleartext, bytes):
             return Encryptor.encrypt_bytes(key, cleartext)
-        raise ValueError
+        raise TypeError
 
     @staticmethod
     def encrypt_file(key: Key, path: str, encoding: str = "utf-8") -> bytes:
@@ -42,13 +42,13 @@ class Encryptor:
             return Encryptor.encrypt(key, f.read())
 
     @staticmethod
-    def decrypt_multi(keys, b: bytes) -> bytes:
+    def decrypt_multi(keys: List[Key], b: bytes) -> bytes:
         return Encryptor._make_fernets(keys).decrypt(b)
 
     @staticmethod
-    def decrypt_bytes(key, b: bytes) -> bytes:
+    def decrypt_bytes(key: Key, b: bytes) -> bytes:
         return Encryptor.decrypt_multi([key], b)
 
     @staticmethod
-    def decrypt_str(key, s: str, encoding: str = "utf-8") -> bytes:
+    def decrypt_str(key: Key, s: str, encoding: str = "utf-8") -> bytes:
         return Encryptor.decrypt_bytes(key, s.encode(encoding))
