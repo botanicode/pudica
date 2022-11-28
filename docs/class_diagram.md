@@ -26,7 +26,7 @@ classDiagram
       class Vault{
         path
         definitions
-        synthetic
+        is_synthetic
         get_ids()
         get_keynames()
         filter_ids()

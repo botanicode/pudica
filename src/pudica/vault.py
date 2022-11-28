@@ -49,14 +49,14 @@ class VaultDefinition:
 
 
 class Vault:
-    __slots__ = ("path", "definitions", "synthetic")
+    __slots__ = ("path", "definitions", "is_synthetic")
 
     def __init__(self, path: Optional[str] = None) -> None:
-        self.synthetic: bool = False
+        self.is_synthetic: bool = False
         self.path: Optional[str] = None
         if path is None:
             logging.debug(f"No path provided, creating a synthetic vault")
-            self.synthetic = True
+            self.is_synthetic = True
             return
         self.path: str = path
         logging.debug(f"Reading vault at `{self.path}`...")
@@ -82,7 +82,7 @@ class Vault:
         ]
 
     def filter_ids(self, id: str) -> int:
-        if self.synthetic is False:
+        if self.is_synthetic is False:
             logging.error(f"Can not filter on a non-sythetic vault")
             raise VaultMutateNotSyntheticError
         beginning_count: int = len(self.definitions)
@@ -90,7 +90,7 @@ class Vault:
         return beginning_count - len(self.definitions)
 
     def filter_keynames(self, keyname: Optional[str]) -> int:
-        if self.synthetic is False:
+        if self.is_synthetic is False:
             logging.error(f"Can not filter on a non-sythetic vault")
             raise VaultMutateNotSyntheticError
         beginning_count: int = len(self.definitions)
@@ -100,7 +100,7 @@ class Vault:
         return beginning_count - len(self.definitions)
 
     def add_definitions(self, definitions: List[VaultDefinition]) -> int:
-        if self.synthetic is False:
+        if self.is_synthetic is False:
             logging.error(f"Can not add definitions to a non-sythetic vault")
             raise VaultMutateNotSyntheticError
         self.definitions += definitions
@@ -112,7 +112,7 @@ class Vault:
         return vault
 
     def upsert(self, definition: VaultDefinition) -> bool:
-        if self.synthetic is True:
+        if self.is_synthetic is True:
             logging.error(f"Can not upsert on a sythetic vault")
             raise VaultUpsertSyntheticError
         for pos, defn in enumerate(self.definitions):
