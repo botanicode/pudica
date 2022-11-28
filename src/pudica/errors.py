@@ -65,5 +65,6 @@ class VaultUpsertSyntheticError(ValueError):
 class VaultWriteFailureError(IOError):
     pass
 
+
 class VaultExistsError(IOError):
     pass

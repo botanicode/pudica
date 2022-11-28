@@ -1,14 +1,13 @@
-import typing
-from typing import Optional
+from typing import Optional, List, Union
 from pudica.encryptor import Encryptor
-from pudica.keychain import Keychain
-from pudica.vault import VaultDefinition, VaultManager
+from pudica.keychain import Key, Keychain
+from pudica.vault import VaultDefinition, VaultManager, Vault
 import uuid
 import os
 
 
 class Pudica:
-    __slots__ = ("__keychain", "__vault")
+    __slots__ = ("_keychain", "_vault")
 
     def __init__(
         self,
@@ -20,78 +19,86 @@ class Pudica:
         self.load_keychain(keychain_path, keyname)
         self.load_vault(vault_paths, keyname)
 
-    def __enter__(self):
+    def __enter__(self) -> "Pudica":
         return self
 
-    def __exit__(self, exc_type, exc_value, exc_tb):
-        del self.__keychain
-        del self.__vault
+    def __exit__(self, exc_type, exc_value, exc_tb) -> None:
+        del self._keychain
+        del self._vault
 
     def load_keychain(
         self, keychain_path: Optional[str] = None, keyname: Optional[str] = None
-    ):
+    ) -> bool:
         if keyname is not None:
-            self.__keychain = Keychain.with_keyname(keyname, keychain_path)
+            self._keychain: Keychain = Keychain.with_keyname(keyname, keychain_path)
         else:
-            self.__keychain = Keychain(keychain_path)
+            self._keychain: Keychain = Keychain(keychain_path)
+        return True
 
     def load_vault(
         self, vault_paths: Optional[str] = None, keyname: Optional[str] = None
-    ):
+    ) -> bool:
         if keyname is not None:
-            self.__vault - VaultManager.with_keyname(keyname, vault_paths)
+            self._vault: VaultManager = VaultManager.with_keyname(keyname, vault_paths)
         else:
-            self.__vault = VaultManager(vault_paths)
+            self._vault: VaultManager = VaultManager(vault_paths)
+        return True
 
     def encrypt(
         self,
-        cleartext: typing.Union[str, bytes],
+        cleartext: Union[str, bytes],
         *,
-        keyname: typing.Optional[str] = None,
+        keyname: Optional[str] = None,
         cleartext_encoding: str = "utf-8",
-        save_id: Optional[str] = None,
     ):
-        key = self.__keychain._get_key(keyname)
-        ciphertext = Encryptor.encrypt(key, cleartext, cleartext_encoding).decode(
+        key: Key = self._keychain._get_key(keyname)
+        ciphertext: str = Encryptor.encrypt(key, cleartext, cleartext_encoding).decode(
             "utf-8"
         )
-        id = uuid.uuid4()
-        vaultpath = ""
-        if save_id is not None:
-            id = save_id
-            vaultpath = self.__vault.paths[0]
-            self.__vault.add(ciphertext, id, key.keyname)
-        return VaultDefinition(id, key.keyname, ciphertext, vaultpath)
+        id: uuid.UUID = uuid.uuid4()
+        return VaultDefinition(id, key.keyname, ciphertext)
 
     def decrypt(
         self,
-        ciphertext: typing.Union[str, bytes, VaultDefinition],
+        ciphertext: Union[str, bytes, VaultDefinition],
         *,
-        keyname: typing.Optional[str] = None,
-        cleartext_encoding: str = "utf-8",
-    ):
-        cipherbytes = bytes()
+        keyname: Optional[str] = None,
+    ) -> bytes:
+        cipherbytes: bytes = bytes()
         if isinstance(ciphertext, bytes):
             cipherbytes = ciphertext
         elif isinstance(ciphertext, str):
             cipherbytes = ciphertext.encode("utf-8")
         elif isinstance(ciphertext, VaultDefinition):
             cipherbytes = ciphertext.ciphertext.encode("utf-8")
-        if keyname == None:
-            keys = self.__keychain.multikeys()
-            cleartext = Encryptor.decrypt_multi(keys, cipherbytes)
         else:
-            key = self.__keychain._get_key(keyname)
-            cleartext = Encryptor.decrypt_bytes(key, cipherbytes)
-        return cleartext.decode(cleartext_encoding)
+            raise TypeError
+        if keyname == None:
+            keys: List[Key] = self._keychain.multikeys()
+            cleartext: bytes = Encryptor.decrypt_multi(keys, cipherbytes)
+        else:
+            key: Key = self._keychain._get_key(keyname)
+            cleartext: bytes = Encryptor.decrypt_bytes(key, cipherbytes)
+        return cleartext
+
+    def decrypt_str(
+        self,
+        ciphertext: Union[str, bytes, VaultDefinition],
+        *,
+        keyname: Optional[str] = None,
+        cleartext_encoding: str = "utf-8",
+    ) -> str:
+        return self.decrypt(ciphertext, keyname=keyname).decode(cleartext_encoding)
 
     @staticmethod
     def generate_keychain(
         path: str = f"{os.path.expanduser('~')}{os.path.sep}.pudica_keychain",
         overwrite: bool = False,
-    ) -> Keychain:
-        return Keychain.generate(path, overwrite)
+    ) -> "Pudica":
+        Keychain.generate(path, overwrite)
+        return Pudica(keychain_path=path)
 
     @staticmethod
-    def generate_vault(path: str, overwrite: bool = False):
-        VaultManager.generate(path, overwrite)
+    def generate_vault(path: str, overwrite: bool = False) -> "Pudica":
+        Vault.generate(path, overwrite)
+        return Pudica(vault_paths=path)

@@ -56,6 +56,7 @@ classDiagram
         load_vault()
         encrypt()
         decrypt()
+        decrypt_str()
         generate_keychain()$
         generate_vault()$
       }

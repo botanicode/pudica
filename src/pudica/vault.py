@@ -150,7 +150,7 @@ class Vault:
         return True
 
     @staticmethod
-    def generate(path: str, overwrite: bool = False) -> 'Vault':
+    def generate(path: str, overwrite: bool = False) -> "Vault":
         logging.debug(f"Generating new vault at path `{path}`...")
         if os.path.exists(path) and overwrite is False:
             logging.error(f"Vault already exists at `{path}`")
@@ -213,20 +213,22 @@ class VaultManager:
         return synthetic_vault.definitions[0]
 
     def upsert_definition(
-        self,
-        definition: VaultDefinition,
-        vault: Optional[Vault] = None
+        self, definition: VaultDefinition, vault: Optional[Vault] = None
     ) -> bool:
         logging.debug(f"Adding definition with id `{definition.id}` to vault...")
         working_vault: Optional[Vault] = definition.vault
-        if working_vault is None: 
+        if working_vault is None:
             working_vault = vault
         if working_vault is None:
             working_vault = self.vaults[0]
-        logging.debug(f"Adding definition with id `{definition.id}` to vault at path `{working_vault.path}`...")
+        logging.debug(
+            f"Adding definition with id `{definition.id}` to vault at path `{working_vault.path}`..."
+        )
         return working_vault.upsert(definition)
 
-    def upsert(self, id: str, ciphertext: str, keyname: Optional[str], vault: Optional[Vault]) -> bool:
+    def upsert(
+        self, id: str, ciphertext: str, keyname: Optional[str], vault: Optional[Vault]
+    ) -> bool:
         working_definition = VaultDefinition(id, keyname, ciphertext, vault)
         return self.upsert_definition(working_definition)
 
