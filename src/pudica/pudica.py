@@ -58,9 +58,13 @@ class Pudica:
         id: uuid.UUID = uuid.uuid4()
         return VaultDefinition(id, key.keyname, ciphertext)
 
-    def encrypt_file(self, path: str, *, keyname: Optional[str] = None) -> bytes:
+    def encrypt_file(self, path: str, *, keyname: Optional[str] = None, save_path: Optional[str] = None) -> bytes:
         key: Key = self._keychain._get_key(keyname)
-        return Encryptor.encrypt_file(key, path)
+        encrypted: bytes = Encryptor.encrypt_file(key, path)
+        if save_path is not None:
+            with open(save_path, "wb") as f:
+                f.write(encrypted)
+        return encrypted
 
     def decrypt(
         self,
@@ -94,10 +98,16 @@ class Pudica:
     ) -> str:
         return self.decrypt(ciphertext, keyname=keyname).decode(cleartext_encoding)
 
-    def decrypt_file(self, path: str, *, keyname: Optional[str] = None) -> bytes:
+    def decrypt_file(self, path: str, *, keyname: Optional[str] = None, save_path: Optional[str] = None) -> bytes:
+        encrypted: bytes = bytes()
         if keyname is not None:
-            return Encryptor.decrypt_file(self._keychain.key(keyname), path)
-        return Encryptor.decrypt_file_multi(self._keychain.multikeys(), path)
+            encrypted = Encryptor.decrypt_file(self._keychain.key(keyname), path)
+        else:
+            encrypted = Encryptor.decrypt_file_multi(self._keychain.multikeys(), path)
+        if save_path is not None:
+            with open(save_path, "wb") as f:
+                f.write(encrypted)
+        return encrypted
 
     @staticmethod
     def generate_keychain(
